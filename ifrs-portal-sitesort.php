@@ -16,7 +16,7 @@ Text Domain:       ifrs-portal-plugin-sitesort
 
 add_filter('get_blogs_of_user', function($blogs) {
     $mainblog = $blogs[1];
-    unset($blogs[0]);
+    unset($blogs[1]);
 
     uasort($blogs, function($a, $b) {
         return strcasecmp($a->blogname, $b->blogname);
