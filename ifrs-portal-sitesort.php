@@ -15,14 +15,21 @@ Text Domain:       ifrs-portal-plugin-sitesort
 */
 
 add_filter('get_blogs_of_user', function($blogs) {
-    $mainblog = $blogs[1];
-    unset($blogs[1]);
-
     uasort($blogs, function($a, $b) {
         return strcasecmp($a->blogname, $b->blogname);
     });
 
-    array_unshift($blogs, $mainblog);
+    $mainblog = array_filter($blogs, function($blog) {
+        if ($blog->userblog_id == get_main_site_id()) {
+            return true;
+        }
+    });
+
+    if ($mainblog) {
+        $mainblog = $mainblog[1];
+        unset($blogs[array_search($mainblog, $blogs)]);
+        array_unshift($blogs, $mainblog);
+    }
 
     return $blogs;
 });
